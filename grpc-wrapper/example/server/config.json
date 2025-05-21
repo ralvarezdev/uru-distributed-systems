@@ -1,0 +1,13 @@
+{
+    "packageName": "book",
+    "serviceName": "BOOK_SERVICE",
+    "port": 50051,
+    "protoOptions": {
+      "keepCase": true,
+      "longs": "String",
+      "enums": "String",
+      "defaults": true,
+      "oneofs": true
+    }
+  }
+  

@@ -1,8 +1,7 @@
 {
-    "protoPath": "./proto/book.proto",
     "packageName": "book",
     "serviceName": "BOOK_SERVICE",
-    "port": "0.0.0.0:50051",
+    "target": "127.0.0.1:50051",
     "protoOptions": {
       "keepCase": true,
       "longs": "String",
