@@ -1,5 +1,5 @@
 import grpc from '@grpc/grpc-js';
-import loadProto from "./proto";
+import loadProto from "./proto.js";
 
 // Create insecure gRPC server
 function createInsecureServer(protoPath, implementation, config = {}) {

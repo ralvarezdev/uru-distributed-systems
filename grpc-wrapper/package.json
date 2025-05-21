@@ -16,10 +16,13 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "client": "node ./example/client/index.js",
+    "server": "node ./example/server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.13.3",
-    "@grpc/proto-loader": "^0.7.15"
+    "@grpc/proto-loader": "^0.7.15",
+    "@js-sdsl/ordered-map": "^4.4.2"
   }
 }
