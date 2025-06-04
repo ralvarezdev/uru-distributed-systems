@@ -1,0 +1,23 @@
+{
+  "name": "load-balancer",
+  "version": "1.0.0",
+  "description": "Load Balancer using gRPC wrappers",
+  "keywords": [
+    "js",
+    "javascript",
+    "load-balancer",
+    "server",
+    "client",
+    "grpc",
+    "grpc-wrapper"
+  ],
+  "license": "ISC",
+  "author": "Ramón Álvarez and Jesús Melendez",
+  "type": "module",
+  "main": "loadBalancerHandler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "instances": "node ./instances/createInstances.js",
+    ""
+  }
+}

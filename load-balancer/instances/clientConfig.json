@@ -1,0 +1,13 @@
+{
+    "packageName": "load_balancer",
+    "serviceName": "LOAD_BALANCER_SERVICE",
+    "target": "127.0.0.1:50051",
+    "protoOptions": {
+      "keepCase": true,
+      "longs": "String",
+      "enums": "String",
+      "defaults": true,
+      "oneofs": true
+    }
+  }
+  

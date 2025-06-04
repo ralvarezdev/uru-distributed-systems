@@ -1,0 +1,18 @@
+syntax = "proto3";
+package load_balancer;
+
+service LOAD_BALANCER_SERVICE {
+    rpc heartbeat(HEARTBEAT_REQUEST) returns (HEARTBEAT_RESPONSE) {};
+}
+
+message HEARTBEAT_REQUEST {
+    int num_cpu = 1;
+    float cpu_clock_speed = 2; // in GHz
+    float uptime = 3;
+    int memory_size = 4; // in MB
+    float memory_usage = 5; // in percentage
+}
+
+message HEARTBEAT_RESPONSE {
+    bool success = 1;
+}

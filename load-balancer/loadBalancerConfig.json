@@ -1,0 +1,13 @@
+{
+    "packageName": "load_balancer",
+    "serviceName": "LOAD_BALANCER_SERVICE",
+    "port": 50051,
+    "protoOptions": {
+        "keepCase": true,
+        "longs": "String",
+        "enums": "String",
+        "defaults": true,
+        "oneofs": true
+    }
+}
+  
