@@ -17,7 +17,8 @@
   "main": "loadBalancerHandler.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "instances": "node ./instances/createInstances.js",
-    ""
+    "instances": "node instances/index.js",
+    "client": "node ./client/index.js",
+    "server": "node ./index.js"
   }
 }
