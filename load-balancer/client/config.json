@@ -1,0 +1,13 @@
+{
+    "packageName": "book",
+    "serviceName": "BOOK_SERVICE",
+    "target": "127.0.0.1:8080",
+    "protoOptions": {
+      "keepCase": true,
+      "longs": "String",
+      "enums": "String",
+      "defaults": true,
+      "oneofs": true
+    }
+  }
+  

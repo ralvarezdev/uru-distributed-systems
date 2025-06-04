@@ -42,7 +42,7 @@ function updateInstanceList() {
 }
 
 // Get the next available instance using round-robin
-function getNextInstance() {
+export function getNextInstance() {
     if (instanceList.length === 0) {
         return null; // No available instances
     }
