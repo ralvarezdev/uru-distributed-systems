@@ -1,8 +1,8 @@
 // Heartbeat timeout
-const HEARTBEAT_TIMEOUT = 10000;
+const HEARTBEAT_TIMEOUT = 15000;
 
 // Property score percentage
-const propertyScorePercentage = {
+const PROPERTY_SCORE_PERCENTAGE = {
     numCPU: 0.2,
     cpuClockSpeed: 0.2,
     uptime: 0.2,
@@ -34,14 +34,22 @@ let currentIndex = 0;
 function updateInstanceList() {
     const now = Date.now();
 
+    // Remove instances that have not sent a heartbeat within the timeout period
+    instancesLastHeartbeat.forEach((lastHeartbeat, key) => {
+        if (now - lastHeartbeat > HEARTBEAT_TIMEOUT) {
+            instancesProperties.delete(key);
+            instancesLastHeartbeat.delete(key);
+            instancesScore.delete(key);
+        }
+    });
+
     // Filter and sort instances by score
     instanceList = Array.from(instancesScore.entries())
-        .filter(([key]) => now - (instancesLastHeartbeat.get(key) || 0) <= HEARTBEAT_TIMEOUT)
         .sort((a, b) => b[1] - a[1]) // Sort by score descending
         .map(([key]) => key);
 }
 
-// Get the next available instance using round-robin
+// Get the next available instance key using round-robin
 export function getNextInstance() {
     if (instanceList.length === 0) {
         return null; // No available instances
@@ -49,26 +57,20 @@ export function getNextInstance() {
 
     const instance = instanceList[currentIndex];
     currentIndex = (currentIndex + 1) % instanceList.length; // Move to the next instance
-    return instance;
-}
-
-// Example usage
-setInterval(() => {
-    updateInstanceList();
-    const nextInstance = getNextInstance();
-    if (nextInstance) {
-        console.log(`Selected instance: ${nextInstance}`);
-    } else {
-        console.log('No available instances');
+    const instanceProperties = instancesProperties.get(instance);
+    return {
+        ip: instanceProperties.ip,
+        port: instanceProperties.port,
     }
-}, 5000); // Update and select every 5 seconds
+}
 
 export default {
     heartbeat: (call, callback) => {
-        // Extracting request metadata
-        const req = call.request
-        const ip = req.ip || req.connection.remoteAddress;
-        const port = req.connection.remotePort;
+        // Extract the client's IP and port
+        const req = call.request;
+        const peer = call.getPeer();
+        console.log(`Heartbeat request from ${peer}:`, req);
+        const [ip, port] = peer.split(':')
 
         // Generate a unique key for the instance
         const instanceKey = `${ip}:${port}`;
@@ -78,6 +80,8 @@ export default {
 
         // Register or update instance
         const instanceProperties = {
+            ip,
+            port,
             numCPU: req.num_cpu,
             cpuClockSpeed: req.cpu_clock_speed,
             uptime: req.uptime,
@@ -88,6 +92,7 @@ export default {
 
         // Update max properties if necessary
         maxProperties.forEach((value, key) => {
+            if (key==='ip' || key==='port') return; // Skip IP and port
             if (req[key] > value) {
                 maxProperties.set(key, req[key]);
             }
@@ -98,7 +103,7 @@ export default {
         Object.keys(instanceProperties).forEach((property) => {
             const value = instanceProperties[property]
             const maxValue = maxProperties.get(property);
-            const percentage = propertyScorePercentage[property]
+            const percentage = PROPERTY_SCORE_PERCENTAGE[property]
             if (maxValue > 0)
                 score += (value / maxValue) * percentage;
         });
@@ -107,8 +112,18 @@ export default {
         // Update the instance list
         updateInstanceList();
 
+        // Log
+        console.log(`Heartbeat received from ${instanceKey}:`, instanceProperties);
+
         return callback(null, {
-            success: true,
+            ip,
+            port,
+            message: `Heartbeat received from ${instanceKey}`,
+        })
+    },
+    getNextInstance: (call, callback) => {
+        return callback(null, {
+            ...getNextInstance()
         })
     }
 }

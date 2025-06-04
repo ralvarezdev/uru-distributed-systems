@@ -1,24 +1,18 @@
-import path from 'path';
-import createClient from '../../grpc-wrapper/wrappers/client.js';
-import config from './config.json' with { type: 'json' };
-import {fileURLToPath} from "url";
+// IP and port of the API gateway
+const IP = 'localhost'
+const PORT = 8080
 
-// Get the directory name of the current module
-const filename = fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
-
-// Create gRPC client
-const client = createClient(
-    path.resolve(dirname, '../../grpc-wrapper/example/proto/book.proto'),
-    config
-);
-
-// Simulate a request
-const request = { id: "2" };
-client.getAllBooks(request, (error, response) => {
-    if (error) {
-        console.error('Error:', error);
-        return;
+// Simulate an HTTP request
+fetch(`http://${IP}:${PORT}/api/book/2`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+}).then(response => {
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
     }
-    console.log('Response:', response);
-});
+    return response.json();
+}).catch(error => {
+    console.error('Error fetching book:', error);
+})

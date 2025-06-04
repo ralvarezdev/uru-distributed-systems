@@ -2,10 +2,10 @@ syntax = "proto3";
 package book;
 
 service BOOK_SERVICE {
-    rpc getAllBooks(BOOK_REQUEST) returns (BOOK_RESPONSE) {};
+    rpc getBookByID(GET_BOOK_BY_ID_REQUEST) returns (GET_BOOK_BY_ID_RESPONSE) {};
 }
 
-message BOOK_REQUEST {
+message GET_BOOK_BY_ID_REQUEST {
     string id = 1;
 }
 
@@ -15,6 +15,6 @@ message Book {
     string author = 3;
 }
 
-message BOOK_RESPONSE {
+message GET_BOOK_BY_ID_RESPONSE {
     repeated Book data = 1; 
 }

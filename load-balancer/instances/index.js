@@ -1,8 +1,16 @@
 import { fork } from 'child_process';
 import path from 'path';
+import {fileURLToPath} from "url";
 
-const serverScript = path.resolve('./server.js'); // Path to the server script
-const basePort = 50052; // Starting port
+// Get the directory name of the current module
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
+// Resolve the path to the server script
+const serverScript = path.resolve(dirname, './server.js');
+
+// Starting port of the server instances
+const basePort = 50052;
 
 for (let i = 0; i < 5; i++) {
     const port = basePort + i;

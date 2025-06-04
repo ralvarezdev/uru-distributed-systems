@@ -15,7 +15,7 @@ const client = createClient(
 
 // Simulate a request
 const request = { id: "2" };
-client.getAllBooks(request, (error, response) => {
+client.getBookByID(request, (error, response) => {
     if (error) {
         console.error('Error:', error);
         return;
