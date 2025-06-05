@@ -16,5 +16,5 @@ message Book {
 }
 
 message GET_BOOK_BY_ID_RESPONSE {
-    repeated Book data = 1; 
+    Book book = 1;
 }

@@ -15,7 +15,7 @@ const dirname = path.dirname(filename);
 const HEARTBEAT_INTERVAL = 5000; // Interval in milliseconds
 
 // Retrieve the IP and port from command-line arguments
-const PORT = process.argv[2] || 50051; // Default port if not provided
+const PORT = process.argv[2] || 50052; // Default port if not provided
 
 // Create Load Balancer gRPC client
 const client = createClient(
@@ -38,6 +38,7 @@ const heartbeatFn = () => {
         memory_size: Math.round(os.totalmem() / (1024 * 1024)),
         memory_usage: Math.round((1 - os.freemem() / os.totalmem()) * 100),
         uptime: os.uptime(), // Uptime in seconds
+        port: PORT, // Port of the server, which might differ from the client port
     }
     client.heartbeat(request, (error, response) => {
         if (error) {

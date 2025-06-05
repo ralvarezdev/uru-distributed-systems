@@ -12,12 +12,11 @@ message HEARTBEAT_REQUEST {
     float uptime = 3;
     int32 memory_size = 4; // in MB
     float memory_usage = 5; // in percentage
+    int32 port = 6;
 }
 
 message HEARTBEAT_RESPONSE {
     string message = 1;
-    string ip = 2;
-    int32 port = 3;
 }
 
 message NEXT_INSTANCE_REQUEST {}

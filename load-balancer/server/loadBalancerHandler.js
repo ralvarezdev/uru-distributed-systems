@@ -69,11 +69,11 @@ export default {
         // Extract the client's IP and port
         const req = call.request;
         const peer = call.getPeer();
-        console.log(`Heartbeat request from ${peer}:`, req);
-        const [ip, port] = peer.split(':')
+        const [ip,] = peer.split(':')
 
         // Generate a unique key for the instance
-        const instanceKey = `${ip}:${port}`;
+        const instanceKey = `${ip}:${req.port}`;
+        console.log(`Heartbeat request from ${instanceKey}:`, req);
 
         // Register heartbeat
         instancesLastHeartbeat.set(instanceKey, Date.now());
@@ -81,7 +81,7 @@ export default {
         // Register or update instance
         const instanceProperties = {
             ip,
-            port,
+            port: req.port,
             numCPU: req.num_cpu,
             cpuClockSpeed: req.cpu_clock_speed,
             uptime: req.uptime,
@@ -116,9 +116,7 @@ export default {
         console.log(`Heartbeat received from ${instanceKey}:`, instanceProperties);
 
         return callback(null, {
-            ip,
-            port,
-            message: `Heartbeat received from ${instanceKey}`,
+            message: `Heartbeat accepted from ${instanceKey}`,
         })
     },
     getNextInstance: (call, callback) => {

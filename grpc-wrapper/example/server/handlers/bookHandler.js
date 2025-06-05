@@ -7,6 +7,11 @@ export default {
         ];
 
         const filtered = books.filter(book => book.id === call.request.id);
-        callback(null, {data: filtered});
+        if (!filtered)
+            callback({
+                code: 5,
+                details: `Book with ID ${call.request.id} not found`
+            });
+        callback(null, {book: filtered[0]});
     }
 }
