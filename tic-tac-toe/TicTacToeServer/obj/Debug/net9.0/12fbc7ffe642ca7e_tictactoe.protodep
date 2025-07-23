@@ -1,0 +1,2 @@
+obj\Debug\net9.0\Protos/Tictactoe.cs \
+obj\Debug\net9.0\Protos/TictactoeGrpc.cs: Protos/tictactoe.proto

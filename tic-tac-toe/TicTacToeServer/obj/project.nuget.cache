@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "iOyZxvAoYWc=",
+  "dgSpecHash": "sNodHKlu2ik=",
   "success": true,
   "projectFilePath": "C:\\Users\\ralva\\Documents\\private\\education\\college\\quarter09\\sistemas-distribuidos\\proyectos\\uru-distributed-systems\\tic-tac-toe\\TicTacToeServer\\TicTacToeServer.csproj",
   "expectedPackageFiles": [
@@ -23,5 +23,15 @@
     "C:\\Users\\ralva\\.nuget\\packages\\system.diagnostics.diagnosticsource\\6.0.0\\system.diagnostics.diagnosticsource.6.0.0.nupkg.sha512",
     "C:\\Users\\ralva\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Error occurred while getting package vulnerability data: No such host is known. (api.nuget.org:443)",
+      "projectPath": "C:\\Users\\ralva\\Documents\\private\\education\\college\\quarter09\\sistemas-distribuidos\\proyectos\\uru-distributed-systems\\tic-tac-toe\\TicTacToeServer\\TicTacToeServer.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\ralva\\Documents\\private\\education\\college\\quarter09\\sistemas-distribuidos\\proyectos\\uru-distributed-systems\\tic-tac-toe\\TicTacToeServer\\TicTacToeServer.csproj",
+      "targetGraphs": []
+    }
+  ]
 }
