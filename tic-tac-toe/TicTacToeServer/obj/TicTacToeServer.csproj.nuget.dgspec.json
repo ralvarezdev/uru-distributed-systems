@@ -47,6 +47,11 @@
             "Grpc.AspNetCore": {
               "target": "Package",
               "version": "[2.64.0, )"
+            },
+            "Grpc.Tools": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.64.0, )"
             }
           },
           "imports": [

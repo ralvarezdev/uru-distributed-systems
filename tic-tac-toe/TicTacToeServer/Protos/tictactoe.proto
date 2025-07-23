@@ -1,21 +1,82 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 option csharp_namespace = "TicTacToeServer";
 
-package greet;
+package tictactoe;
 
-// The greeting service definition.
-service Greeter {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply);
+service TicTacToe {
+  rpc StartGame (StartGameRequest) returns (StartGameReply);
+  rpc WaitForPlayer (WaitForPlayerRequest) returns (stream WaitForPlayerReply);
+  rpc JoinGame (JoinGameRequest) returns (JoinGameReply);
+  rpc MakeMove (stream MoveRequest) returns (stream MoveReply);
+  rpc NotifyOpponentMove (NotifyOpponentMoveRequest) returns (stream NotifyOpponentMoveReply);
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
+message StartGameRequest {
+  Symbol symbol = 1;
+  string name = 2;
 }
 
-// The response message containing the greetings.
-message HelloReply {
-  string message = 1;
+message StartGameReply {
+  string gameId = 1;
+  string gameCode = 2;
+}
+
+message WaitForPlayerRequest {
+  string gameId = 1;
+}
+
+message WaitForPlayerReply {
+  string gameId = 1;
+  GameStatus status = 4;
+}
+
+message JoinGameRequest {
+  string gameCode = 1;
+  string name = 2;
+}
+
+message JoinGameReply {
+  string gameId = 1;
+  Symbol symbol = 2;
+}
+
+message MoveRequest {
+  string gameId = 1;
+  string playerId = 2;
+  int32 row = 3;
+  int32 col = 4;
+}
+
+message MoveReply {
+  string gameId = 1;
+  optional string error = 2;
+  GameStatus status = 3;
+}
+
+message NotifyOpponentMoveRequest {
+  string gameId = 1;
+  string playerId = 2;
+}
+
+message NotifyOpponentMoveReply {
+  string gameId = 1;
+  int32 row = 2;
+  int32 col = 3;
+  GameStatus status = 4;
+}
+
+enum GameStatus {
+  WAITING_FOR_PLAYER = 0;
+  IN_PROGRESS = 1;
+  DRAW = 2;
+  X_WON = 3;
+  O_WON = 4;
+}
+
+enum Symbol {
+  X = 0;
+  O = 1;
 }

@@ -790,7 +790,8 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "Grpc.AspNetCore >= 2.64.0"
+      "Grpc.AspNetCore >= 2.64.0",
+      "Grpc.Tools >= 2.64.0"
     ]
   },
   "packageFolders": {
@@ -837,6 +838,11 @@
         "targetAlias": "net9.0",
         "dependencies": {
           "Grpc.AspNetCore": {
+            "target": "Package",
+            "version": "[2.64.0, )"
+          },
+          "Grpc.Tools": {
+            "suppressParent": "All",
             "target": "Package",
             "version": "[2.64.0, )"
           }
