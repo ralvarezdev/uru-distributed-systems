@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
-
 option csharp_namespace = "TicTacToeServer";
 
 package tictactoe;
@@ -30,7 +28,8 @@ message WaitForPlayerRequest {
 
 message WaitForPlayerReply {
   string gameId = 1;
-  GameStatus status = 4;
+  GameStatus status = 2;
+  optional string inviteeName = 3;
 }
 
 message JoinGameRequest {
@@ -41,6 +40,7 @@ message JoinGameRequest {
 message JoinGameReply {
   string gameId = 1;
   Symbol symbol = 2;
+  string hostName = 3;
 }
 
 message MoveRequest {
