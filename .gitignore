@@ -1,0 +1,15 @@
+# JetBrains Rider and ReSharper settings
+.idea
+/**/*/.idea
+
+# Visual Studio Code settings
+.vscode
+/**/*/.vscode
+
+# Temporary C# files and directories
+*.tmp
+*.bak
+obj
+
+# Build directories
+bin
