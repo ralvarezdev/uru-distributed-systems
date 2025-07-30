@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace TicTacToe.ComObject
 {
-    // COM Interface 
+    // COM Interface
     [ComVisible(true)]
     [Guid("B1234567-B89C-4D5E-8F01-23456789ABCD")]
     [InterfaceType(ComInterfaceType.InterfaceIsDual)]
@@ -60,13 +60,13 @@ namespace TicTacToe.ComObject
         {
             // Validate input
             if (position < 0 || position > 8)
-                return "Error: Posición inválida (0-8)";
-            
+                return "Error: Invalid position (0-8)";
+
             if (gameOver)
-                return "Error: El juego ya terminó";
-            
+                return "Error: The game is already over";
+
             if (board[position] != '-')
-                return "Error: Posición ocupada";
+                return "Error: Position already taken";
 
             // Make the move
             board[position] = currentPlayer;
@@ -75,15 +75,15 @@ namespace TicTacToe.ComObject
             {
                 gameOver = true;
                 winner = currentPlayer.ToString();
-                return string.Format("¡{0} gana!", currentPlayer);
+                return string.Format("{0} wins!", currentPlayer);
             }
 
             // Check for tie
             if (Array.IndexOf(board, '-') == -1)
             {
                 gameOver = true;
-                winner = "Empate";
-                return "¡Empate!";
+                winner = "Draw";
+                return "Draw!";
             }
 
             // Switch players
@@ -95,7 +95,7 @@ namespace TicTacToe.ComObject
         {
             for (int i = 0; i < 9; i++)
                 board[i] = '-';
-            
+
             currentPlayer = 'X';
             gameOver = false;
             winner = string.Empty;

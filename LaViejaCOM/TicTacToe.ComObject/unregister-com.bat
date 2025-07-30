@@ -17,19 +17,19 @@ if %errorLevel% == 0 (
 echo.
 echo 1. Buscando regasm.exe...
 
-set REGASM_PATH=""
-set FRAMEWORK_PATH="C:\Windows\Microsoft.NET\Framework64\v4.0.30319\regasm.exe"
-set FRAMEWORK_PATH_32="C:\Windows\Microsoft.NET\Framework\v4.0.30319\regasm.exe"
+set REGASM_PATH=
+set FRAMEWORK_PATH=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\regasm.exe
+set FRAMEWORK_PATH_32=C:\Windows\Microsoft.NET\Framework\v4.0.30319\regasm.exe
 
-if exist %FRAMEWORK_PATH% (
+if exist "%FRAMEWORK_PATH%" (
     set REGASM_PATH=%FRAMEWORK_PATH%
-    echo Encontrado regasm.exe (64-bit): %FRAMEWORK_PATH%
-) else if exist %FRAMEWORK_PATH_32% (
+    echo Encontrado regasm.exe 64-bit: %FRAMEWORK_PATH%
+) else if exist "%FRAMEWORK_PATH_32%" (
     set REGASM_PATH=%FRAMEWORK_PATH_32%
-    echo Encontrado regasm.exe (32-bit): %FRAMEWORK_PATH_32%
+    echo Encontrado regasm.exe 32-bit: %FRAMEWORK_PATH_32%
 ) else (
     echo ERROR: No se pudo encontrar regasm.exe
-    echo Verifica que .NET Framework 4.0+ esté instalado
+    echo Verifica que .NET Framework 4.0+ este instalado
     pause
     exit /b 1
 )
@@ -37,26 +37,25 @@ if exist %FRAMEWORK_PATH% (
 :: Desregistrar el COM object
 echo.
 echo 2. Desregistrando COM object...
-set DLL_PATH="bin\Release\net48\TicTacToe.ComObject.dll"
+set DLL_PATH=bin\Release\net48\TicTacToe.ComObject.dll
 
-if exist %DLL_PATH% (
+if exist "%DLL_PATH%" (
     echo Desregistrando: %DLL_PATH%
-    %REGASM_PATH% %DLL_PATH% /unregister
-    
+    "%REGASM_PATH%" "%DLL_PATH%" /unregister
     if %errorLevel% == 0 (
         echo.
         echo ================================================
-        echo ¡COM Object desregistrado exitosamente!
+        echo COM Object unregistered successfully!
         echo ================================================
     ) else (
-        echo ERROR: Falló la desregistración del COM object
+        echo ERROR: Failed to unregister the COM object
     )
 ) else (
-    echo ADVERTENCIA: No se encontró el archivo DLL: %DLL_PATH%
-    echo Intentando desregistrar de todos modos...
-    %REGASM_PATH% "TicTacToe.ComObject.dll" /unregister
+    echo WARNING: DLL file not found: %DLL_PATH%
+    echo Trying to unregister anyway...
+    "%REGASM_PATH%" TicTacToe.ComObject.dll /unregister
 )
 
 echo.
-echo Presiona cualquier tecla para continuar...
+echo Press any key to continue...
 pause >nul

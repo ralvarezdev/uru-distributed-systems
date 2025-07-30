@@ -8,87 +8,120 @@ namespace TicTacToe.User
         static void Main()
         {
             object game = null;
-            
+
             try
             {
                 // Create COM object instance
                 var comType = Type.GetTypeFromProgID("LaViejaCOM.LaViejaGame");
                 if (comType == null)
                 {
-                    Console.WriteLine("Error: No se pudo encontrar el objeto COM.");
-                    Console.WriteLine("Asegurate de que el objeto COM este registrado.");
+                    Console.WriteLine("Error: Could not find the COM object.");
+                    Console.WriteLine("Make sure the COM object is registered.");
                     return;
                 }
 
                 game = Activator.CreateInstance(comType);
-                Console.WriteLine("=== La Vieja (Tic Tac Toe) COM ===\n");
+                Console.WriteLine("=== La Vieja (Tic Tac Toe) With COM ===\n");
+
+                Console.WriteLine("Press any key to start...");
+                Console.ReadKey();
 
                 // Game loop
                 while (true)
                 {
-                    string board = (string)comType.InvokeMember("GetBoard", 
+                    //Console.Clear();
+                    string board = (string)comType.InvokeMember("GetBoard",
                         System.Reflection.BindingFlags.InvokeMethod, null, game, null);
+
+                    string current = (string)comType.InvokeMember("GetCurrent",
+                        System.Reflection.BindingFlags.InvokeMethod, null, game, null);
+
+                    // Visual banner for each turn
+                    Console.WriteLine("==============================");
+                    Console.Write("Current turn: ");
+                    if (current == "X") Console.ForegroundColor = ConsoleColor.Cyan;
+                    else if (current == "O") Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(current);
+                    Console.ResetColor();
+                    Console.WriteLine("==============================");
+
                     PrintBoard(board);
-                    
-                    bool gameOver = (bool)comType.InvokeMember("IsGameOver", 
+
+                    bool gameOver = (bool)comType.InvokeMember("IsGameOver",
                         System.Reflection.BindingFlags.InvokeMethod, null, game, null);
-                    
+
                     if (gameOver)
                     {
-                        string winner = (string)comType.InvokeMember("GetWinner", 
+                        string winner = (string)comType.InvokeMember("GetWinner",
                             System.Reflection.BindingFlags.InvokeMethod, null, game, null);
-                        
-                        if (winner == "Empate")
-                            Console.WriteLine("🤝 ¡Es un empate!");
-                        else
-                            Console.WriteLine(string.Format("🎉 ¡{0} es el ganador!", winner));
-                        
-                        Console.Write("\n¿Jugar otra vez? (s/n): ");
-                        if (Console.ReadLine()?.ToLower() == "s")
+
+                        if (winner == "Empate" || winner == "Draw")
                         {
-                            comType.InvokeMember("Reset", 
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.WriteLine("🤝 It's a draw!");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"🎉 {winner} is the winner!");
+                            Console.ResetColor();
+                        }
+
+                        Console.Write("\nPlay again? (y/n): ");
+                        if (Console.ReadLine()?.ToLower() == "y")
+                        {
+                            comType.InvokeMember("Reset",
                                 System.Reflection.BindingFlags.InvokeMethod, null, game, null);
                             continue;
                         }
                         break;
                     }
 
-                    string current = (string)comType.InvokeMember("GetCurrent", 
-                        System.Reflection.BindingFlags.InvokeMethod, null, game, null);
-                    
-                    Console.WriteLine(string.Format("Turno de: {0}", current));
-                    Console.Write("Ingresa posicion (0-8) o 'q' para salir: ");
-                    
+                    Console.Write("Enter position (0-8) or 'q' to quit: ");
+
                     string input = Console.ReadLine();
                     if (input?.ToLower() == "q")
                         break;
 
                     if (!int.TryParse(input, out int position))
                     {
-                        Console.WriteLine("❌ Ingresa un numero valido.\n");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("❌ Please enter a valid number.\n");
+                        Console.ResetColor();
                         continue;
                     }
 
-                    string result = (string)comType.InvokeMember("Play", 
+                    string result = (string)comType.InvokeMember("Play",
                         System.Reflection.BindingFlags.InvokeMethod, null, game, new object[] { position });
-                    
+
                     if (result != "OK")
                     {
                         if (result.StartsWith("Error:"))
-                            Console.WriteLine(string.Format("❌ {0}\n", result));
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"❌ {result}\n");
+                            Console.ResetColor();
+                        }
                         else
-                            Console.WriteLine(string.Format("🎯 {0}\n", result));
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"🎯 {result}\n");
+                            Console.ResetColor();
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("✅ Movimiento realizado.\n");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("✅ Move made.\n");
+                        Console.ResetColor();
                     }
                 }
             }
             catch (COMException comEx)
             {
-                Console.WriteLine(string.Format("Error COM: {0}", comEx.Message));
-                Console.WriteLine("Verifica que el objeto COM este correctamente registrado.");
+                Console.WriteLine(string.Format("COM Error: {0}", comEx.Message));
+                Console.WriteLine("Check that the COM object is properly registered.");
             }
             catch (Exception ex)
             {
@@ -103,7 +136,7 @@ namespace TicTacToe.User
                 }
             }
 
-            Console.WriteLine("\nPresiona cualquier tecla para salir...");
+            Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();
         }
 
@@ -118,10 +151,27 @@ namespace TicTacToe.User
                     int index = row * 3 + col;
                     char cell = boardString[index];
                     string display = cell == '-' ? index.ToString() : cell.ToString();
-                    Console.Write(string.Format(" {0} │", display));
+                    // Color for X and O
+                    if (cell == 'X')
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.Write($" {display} ");
+                        Console.ResetColor();
+                    }
+                    else if (cell == 'O')
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write($" {display} ");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.Write($" {display} ");
+                    }
+                    Console.Write("│");
                 }
                 Console.WriteLine();
-                
+
                 if (row < 2)
                     Console.WriteLine("├───┼───┼───┤");
             }
