@@ -20,6 +20,7 @@ namespace TicTacToe.User
                     return;
                 }
 
+                // Create instance of the COM object
                 game = Activator.CreateInstance(comType);
                 Console.WriteLine("=== La Vieja (Tic Tac Toe) With COM ===\n");
 
@@ -30,11 +31,8 @@ namespace TicTacToe.User
                 while (true)
                 {
                     //Console.Clear();
-                    string board = (string)comType.InvokeMember("GetBoard",
-                        System.Reflection.BindingFlags.InvokeMethod, null, game, null);
-
-                    string current = (string)comType.InvokeMember("GetCurrent",
-                        System.Reflection.BindingFlags.InvokeMethod, null, game, null);
+                    string board = (string)InvokeComMethod(comType, game, "GetBoard");
+                    string current = (string)InvokeComMethod(comType, game, "GetCurrent");
 
                     // Visual banner for each turn
                     Console.WriteLine("==============================");
@@ -47,15 +45,13 @@ namespace TicTacToe.User
 
                     PrintBoard(board);
 
-                    bool gameOver = (bool)comType.InvokeMember("IsGameOver",
-                        System.Reflection.BindingFlags.InvokeMethod, null, game, null);
+                    bool gameOver = (bool)InvokeComMethod(comType, game, "IsGameOver");
 
                     if (gameOver)
                     {
-                        string winner = (string)comType.InvokeMember("GetWinner",
-                            System.Reflection.BindingFlags.InvokeMethod, null, game, null);
+                        string winner = (string)InvokeComMethod(comType, game, "GetWinner");
 
-                        if (winner == "Empate" || winner == "Draw")
+                        if (winner == "Draw")
                         {
                             Console.ForegroundColor = ConsoleColor.Magenta;
                             Console.WriteLine("🤝 It's a draw!");
@@ -71,8 +67,7 @@ namespace TicTacToe.User
                         Console.Write("\nPlay again? (y/n): ");
                         if (Console.ReadLine()?.ToLower() == "y")
                         {
-                            comType.InvokeMember("Reset",
-                                System.Reflection.BindingFlags.InvokeMethod, null, game, null);
+                            InvokeComMethod(comType, game, "Reset");
                             continue;
                         }
                         break;
@@ -92,8 +87,7 @@ namespace TicTacToe.User
                         continue;
                     }
 
-                    string result = (string)comType.InvokeMember("Play",
-                        System.Reflection.BindingFlags.InvokeMethod, null, game, new object[] { position });
+                    string result = (string)InvokeComMethod(comType, game, "Play", position);
 
                     if (result != "OK")
                     {
@@ -138,6 +132,11 @@ namespace TicTacToe.User
 
             Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();
+        }
+
+        static object InvokeComMethod(Type comType, object comInstance, string methodName, params object[] args)
+        {
+            return comType.InvokeMember(methodName, System.Reflection.BindingFlags.InvokeMethod, null, comInstance, args);
         }
 
         static void PrintBoard(string boardString)
